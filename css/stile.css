@@ -1,0 +1,315 @@
+:root {
+  --carta: #f6efe1;
+  --carta-scura: #ece1cb;
+  --inchiostro: #3b2a1a;
+  --inchiostro-tenue: #7a6550;
+  --legno: #b9824f;
+  --legno-scuro: #8a5a33;
+  --accento: #e2683c;
+  --ombra: 0 1px 0 rgba(59, 42, 26, .08), 0 18px 40px -18px rgba(59, 42, 26, .45);
+  --display: 'Fraunces', Georgia, serif;
+  --testo: 'Andika', 'Trebuchet MS', system-ui, sans-serif;
+  --grana: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .16 0 0 0 0 .1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--carta) var(--grana);
+  color: var(--inchiostro);
+  font-family: var(--testo);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accento); outline-offset: 3px; border-radius: 8px; }
+
+/* ---------- Libreria ---------- */
+.libreria { min-height: 100vh; display: flex; flex-direction: column; }
+
+.testata {
+  padding: clamp(28px, 6vw, 72px) 16px 8px;
+  max-width: 1120px; width: 100%; margin: 0 auto;
+  display: grid; gap: 14px;
+}
+.marchio { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: .02em; color: var(--inchiostro-tenue); }
+.marchio svg { width: 44px; height: 33px; }
+.testata h1 {
+  font-family: var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+  font-weight: 650; font-size: clamp(2.5rem, 7vw, 5.2rem); line-height: .95; letter-spacing: -.02em;
+  margin: 0; max-width: 13ch; text-wrap: balance;
+}
+.testata h1 em { font-style: italic; color: var(--accento); }
+.testata p { margin: 0; font-size: clamp(1.05rem, 1.6vw, 1.3rem); max-width: 46ch; color: var(--inchiostro-tenue); line-height: 1.5; }
+
+.scaffale { max-width: 1120px; width: 100%; margin: clamp(28px, 5vw, 56px) auto 0; padding: 0 16px; }
+.ripiano {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px);
+  padding: 0 clamp(4px, 2vw, 24px) 22px;
+  position: relative;
+}
+.ripiano::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; border-radius: 4px;
+  background: linear-gradient(var(--legno) 0 55%, var(--legno-scuro) 55%);
+  box-shadow: 0 14px 22px -10px rgba(59, 42, 26, .5);
+}
+
+.libro-scaffale {
+  all: unset; cursor: pointer; display: grid; gap: 14px; justify-items: center;
+  perspective: 900px; position: relative; z-index: 1;
+}
+.libro-scaffale .copertina {
+  width: 100%; aspect-ratio: 1 / 1.08; position: relative; border-radius: 4px 10px 10px 4px; overflow: hidden;
+  background: var(--colore);
+  box-shadow: var(--ombra), inset 0 0 0 1px rgba(0,0,0,.08);
+  transform-origin: left center;
+  transform: rotateY(-6deg);
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s;
+}
+.libro-scaffale:hover .copertina, .libro-scaffale:focus-visible .copertina {
+  transform: rotateY(-22deg) translateY(-8px);
+  box-shadow: 0 1px 0 rgba(59,42,26,.08), 26px 30px 40px -18px rgba(59, 42, 26, .55);
+}
+.libro-scaffale:focus-visible { outline: none; }
+.libro-scaffale:focus-visible .titolo-scaffale { text-decoration: underline 3px var(--accento); text-underline-offset: 5px; }
+.libro-scaffale .titolo-scaffale { font-family: var(--display); font-weight: 650; font-size: 1.2rem; text-align: center; line-height: 1.15; text-wrap: balance; }
+.libro-scaffale .meta { font-size: .95rem; color: var(--inchiostro-tenue); margin-top: -8px; }
+.segnalibro {
+  position: absolute; top: -4px; right: 18px; z-index: 3; background: var(--accento); color: #fff;
+  font-size: .78rem; font-weight: 700; padding: 10px 7px 14px; writing-mode: vertical-rl;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%);
+}
+
+/* La copertina (condivisa tra scaffale e libro) */
+.copertina-arte { position: absolute; inset: 0; }
+.copertina-arte svg { width: 100%; height: 100%; display: block; }
+.copertina-band {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 14% 9% 9%;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--colore) 92%, black) 38%);
+  color: #fff; display: grid; gap: 4px;
+}
+.copertina-band h2 { margin: 0; font-family: var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1; font-weight: 700; font-size: clamp(1.2rem, 2.4cqi, 2.6rem); line-height: 1.02; text-wrap: balance; }
+.copertina-band span { font-size: clamp(.75rem, 1.1cqi, 1.1rem); opacity: .85; }
+.dorso { position: absolute; left: 0; top: 0; bottom: 0; width: 7%; background: linear-gradient(90deg, rgba(0,0,0,.28), rgba(255,255,255,.12) 60%, rgba(0,0,0,.08)); z-index: 2; }
+.libro-scaffale .copertina { container-type: inline-size; }
+.libro-scaffale .copertina-band h2 { font-size: clamp(1.05rem, 11cqi, 1.6rem); }
+.libro-scaffale .copertina-band span { font-size: .8rem; }
+
+.piede { margin-top: auto; padding: 56px 16px 28px; text-align: center; color: var(--inchiostro-tenue); font-size: .95rem; }
+
+/* ---------- Lettore ---------- */
+.lettore { height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+.barra {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top));
+}
+.barra .titolo-barra { font-family: var(--display); font-weight: 650; font-size: 1.1rem; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pulsante {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border-radius: 999px;
+  border: 2px solid var(--inchiostro); background: #fffaf0; font-weight: 700; font-size: 1rem;
+  box-shadow: 0 3px 0 var(--inchiostro); transition: transform .12s, box-shadow .12s;
+}
+.pulsante:hover { transform: translateY(-1px); box-shadow: 0 4px 0 var(--inchiostro); }
+.pulsante:active { transform: translateY(3px); box-shadow: 0 0 0 var(--inchiostro); }
+.pulsante svg { width: 22px; height: 22px; }
+.pulsante[aria-pressed="true"] { background: var(--accento); color: #fff; }
+.pulsante.icona { padding: 0; width: 48px; justify-content: center; }
+@media (max-width: 560px) { .pulsante .etichetta { display: none; } .pulsante { padding: 0 13px; } }
+
+.palco { display: grid; place-items: center; padding: 8px 16px; min-height: 0; position: relative; }
+
+.libro {
+  --w: min(44vw, (100dvh - 190px) / .82, 680px);
+  width: calc(var(--w) * 2); height: calc(var(--w) * .82);
+  position: relative; perspective: 2600px;
+  transition: transform .8s cubic-bezier(.3,.7,.2,1);
+}
+.libro.chiuso { transform: translateX(-25%); }
+.libro.singolo { --w: min(100vw - 32px, (100dvh - 180px) * .72, 560px); width: var(--w); height: calc(var(--w) / .72); }
+.libro.singolo.chiuso { transform: none; }
+
+.pagina, .foglio > div {
+  position: absolute; top: 0; height: 100%; overflow: hidden;
+  background: var(--carta-libro, #fbf6ea) var(--grana);
+}
+.libro:not(.singolo) .pagina.sx, .foglio.sx { left: 0; width: 50%; border-radius: 10px 2px 2px 10px; }
+.libro:not(.singolo) .pagina.dx, .foglio.dx { left: 50%; width: 50%; border-radius: 2px 10px 10px 2px; }
+.libro.singolo .pagina, .libro.singolo .foglio { left: 0; width: 100%; border-radius: 4px 12px 12px 4px; }
+.pagina.vuota { background: none; }
+.pagina:not(.vuota) { box-shadow: 0 22px 40px -22px rgba(59, 42, 26, .6), 0 0 0 1px rgba(59, 42, 26, .07); }
+
+/* ombra della piega centrale */
+.pagina.sx::after, .pagina.dx::after, .foglio .fronte::after, .foglio .retro::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.libro:not(.singolo) .pagina.sx::after { background: linear-gradient(270deg, rgba(59,42,26,.22), rgba(59,42,26,0) 9%); }
+.libro:not(.singolo) .pagina.dx::after { background: linear-gradient(90deg, rgba(59,42,26,.22), rgba(59,42,26,0) 9%); }
+.libro.singolo .pagina::after { background: linear-gradient(90deg, rgba(59,42,26,.18), rgba(59,42,26,0) 6%); }
+
+.foglio { position: absolute; top: 0; height: 100%; transform-style: preserve-3d; z-index: 5; will-change: transform; }
+.foglio.sx { transform-origin: right center; }
+.foglio.dx, .libro.singolo .foglio { transform-origin: left center; }
+.foglio > div { inset: 0; width: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: inherit; }
+.foglio .retro { transform: rotateY(180deg); }
+.foglio .luce { position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 4; background: linear-gradient(90deg, rgba(255,255,255,.0), rgba(255,255,255,.35) 40%, rgba(59,42,26,.25)); }
+
+/* contenuti di pagina */
+.arte { position: absolute; inset: 0; }
+.arte svg { width: 100%; height: 100%; display: block; }
+
+.testo-pagina {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;
+  padding: 9% 11% 13%; container-type: inline-size;
+}
+.testo-pagina p {
+  margin: 0; font-size: clamp(1.05rem, 6.2cqi, 2.1rem); line-height: 1.55; text-wrap: pretty; hyphens: manual;
+}
+.testo-pagina p::first-letter {
+  font-family: var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1; font-weight: 800; color: var(--colore);
+  float: left; font-size: 3.1em; line-height: .82; margin: .06em .1em 0 0;
+}
+.testo-pagina .w { border-radius: 6px; transition: background .15s; }
+.testo-pagina .w.ora { background: color-mix(in srgb, var(--colore) 22%, transparent); }
+.numero { position: absolute; bottom: 5.5%; left: 0; right: 0; text-align: center; font-family: var(--display); font-style: italic; color: var(--inchiostro-tenue); font-size: clamp(.85rem, 1.4vw, 1.05rem); }
+.fregio { display: block; width: 46px; height: 12px; margin: 0 auto 6%; color: var(--colore); }
+
+.unita { position: absolute; inset: 0; display: grid; grid-template-rows: 52% 1fr; }
+.unita .arte { position: relative; inset: auto; }
+.unita .testo-pagina { position: relative; inset: auto; padding: 6% 9% 12%; justify-content: flex-start; }
+.unita .testo-pagina p { font-size: clamp(1.05rem, 5.2cqi, 1.6rem); line-height: 1.5; }
+.unita .testo-pagina p::first-letter { font-size: 2.6em; }
+
+.frontespizio, .finale {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 4%;
+  padding: 10%; container-type: inline-size;
+}
+.frontespizio h2, .finale h2 {
+  font-family: var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144; font-weight: 700; margin: 0;
+  font-size: clamp(1.6rem, 10cqi, 3.6rem); line-height: 1; color: var(--colore); text-wrap: balance;
+}
+.frontespizio p, .finale p { margin: 0; font-size: clamp(.95rem, 4.6cqi, 1.3rem); color: var(--inchiostro-tenue); }
+.finale .azioni { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 6%; }
+.finale h2 { font-size: clamp(2.6rem, 20cqi, 6rem); font-style: italic; }
+.risguardo { position: absolute; inset: 0; background-color: var(--colore); background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,.16) 0 7%, transparent 7.5%), radial-gradient(circle at 75% 75%, rgba(255,255,255,.16) 0 7%, transparent 7.5%); background-size: 64px 64px; }
+.stellina { width: 28px; height: 28px; margin: 0 auto; color: var(--colore); }
+
+.copertina-libro { position: absolute; inset: 0; background: var(--colore); container-type: inline-size; border-radius: inherit; overflow: hidden; }
+.copertina-libro .copertina-band h2 { font-size: clamp(1.6rem, 10cqi, 3.8rem); }
+.copertina-libro .copertina-band span { font-size: clamp(.85rem, 3.6cqi, 1.2rem); }
+.copertina-libro .apri { position: absolute; top: 6%; right: 6%; background: #fffaf0; color: var(--inchiostro); border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: clamp(.8rem, 3cqi, 1rem); box-shadow: 0 3px 0 var(--inchiostro); border: 2px solid var(--inchiostro); animation: saltella 2.4s ease-in-out infinite; }
+
+/* navigazione */
+.freccia {
+  position: absolute; top: 50%; translate: 0 -50%; z-index: 10;
+  width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid var(--inchiostro);
+  background: #fffaf0; display: grid; place-items: center; box-shadow: 0 4px 0 var(--inchiostro);
+  transition: transform .15s, box-shadow .15s, opacity .25s;
+}
+.freccia svg { width: 30px; height: 30px; }
+.freccia:hover { transform: translateY(-2px); }
+.freccia:active { transform: translateY(4px); box-shadow: 0 0 0 var(--inchiostro); }
+.freccia[disabled] { opacity: 0; pointer-events: none; }
+.freccia.prec { left: max(12px, calc(50% - var(--meta-libro, 50vw) - 84px)); }
+.freccia.succ { right: max(12px, calc(50% - var(--meta-libro, 50vw) - 84px)); }
+@media (max-width: 820px) { .freccia { display: none; } }
+
+.fondo { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 10px 16px 18px; padding-bottom: max(18px, env(safe-area-inset-bottom)); min-height: 64px; }
+.puntini { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.puntini button { all: unset; cursor: pointer; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--inchiostro); transition: background .2s, transform .2s; }
+.puntini button[aria-current="true"] { background: var(--accento); border-color: var(--accento); transform: scale(1.3); }
+.puntini button:focus-visible { outline: 3px solid var(--accento); outline-offset: 3px; }
+.suggerimento { color: var(--inchiostro-tenue); font-size: .95rem; }
+@media (max-width: 820px) { .suggerimento { display: none; } }
+
+/* animazioni delle scene */
+.gira { animation: gira 30s linear infinite; }
+.brilla { animation: brilla 3s ease-in-out infinite; }
+.galleggia { animation: galleggia 4s ease-in-out infinite; }
+.dondola { animation: dondola 3.5s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+.ondeggia { animation: dondola 4s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+.sale { animation: sale 3s ease-in infinite; }
+.piove { animation: piove 1.2s linear infinite; }
+.zampilla { animation: zampilla 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+.cade { animation: cade 2s ease-in infinite; }
+.soffia { animation: soffia 2.4s ease-in-out infinite; }
+.zzz { animation: brilla 2.4s ease-in-out infinite; }
+.alone { animation: brilla 2.2s ease-in-out infinite; }
+@keyframes gira { to { transform: rotate(360deg); } }
+@keyframes brilla { 50% { opacity: .25; } }
+@keyframes galleggia { 50% { transform: translateY(-5px); } }
+@keyframes dondola { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes sale { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-40px); opacity: 0; } }
+@keyframes piove { from { transform: translateY(-30px); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(40px); opacity: 0; } }
+@keyframes zampilla { 50% { transform: scaleY(1.12); } }
+@keyframes cade { from { transform: translateY(-20px); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(60px); opacity: 0; } }
+@keyframes soffia { 50% { transform: translateX(8px); } }
+@keyframes saltella { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+}
+
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
+.noscript { padding: 24px; text-align: center; }
+.finale h2.piccolo { font-size: clamp(1.6rem, 10cqi, 3rem); font-style: normal; }
+
+/* copertina: illustrazione intera sopra, fascia del titolo sotto */
+.copertina-arte { bottom: 30%; }
+.copertina-band { padding: 8% 9% 9%; background: linear-gradient(transparent, var(--colore) 26%); min-height: 38%; align-content: end; }
+.pagina.vuota { box-shadow: none; }
+.pagina.vuota::after { display: none; }
+a.pulsante { text-decoration: none; color: var(--inchiostro); }
+.copertina-libro .apri { top: auto; bottom: 7%; right: 7%; }
+.lettore { grid-template-columns: minmax(0, 1fr); }
+.barra .titolo-barra { min-width: 0; }
+.copertina-libro .apri { position: static; justify-self: start; margin-top: 4%; animation: saltella 2.4s ease-in-out infinite; }
+
+/* ---------- Proposta Pasticciotti ---------- */
+.marchio .logo { height: clamp(56px, 8vw, 84px); width: auto; display: block; }
+.titolo-sezione {
+  font-family: var(--display); font-weight: 650; font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 0 0 6px;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+}
+.titolo-sezione span { font-family: var(--testo); font-weight: 400; font-size: 1rem; color: var(--inchiostro-tenue); }
+.nota-sezione { margin: 0 0 8px; max-width: 60ch; color: var(--inchiostro-tenue); line-height: 1.5; }
+.scaffale + .scaffale { margin-top: clamp(48px, 7vw, 88px); }
+.ripiano { margin-top: clamp(20px, 3vw, 32px); }
+
+.copertina-arte img, .arte img { width: 100%; height: 100%; object-fit: cover; display: block; background: #fff; }
+
+.slot {
+  position: absolute; inset: 7%; border: 3px dashed color-mix(in srgb, var(--colore) 45%, transparent); border-radius: 14px;
+  display: grid; place-items: center; text-align: center;
+  background: color-mix(in srgb, var(--colore) 6%, transparent);
+  color: color-mix(in srgb, var(--colore) 70%, var(--inchiostro)); font-family: var(--display); font-style: italic; font-size: clamp(1rem, 2vw, 1.5rem); line-height: 1.3;
+}
+.unita .slot { inset: 6%; }
+.slot-testo { display: grid; gap: 14px; width: 100%; }
+.slot-testo i { display: block; height: 14px; border-radius: 7px; background: color-mix(in srgb, var(--inchiostro) 11%, transparent); }
+.slot-testo i:nth-child(2) { width: 92%; } .slot-testo i:nth-child(3) { width: 97%; } .slot-testo i:nth-child(4) { width: 86%; }
+.slot-testo small { margin-top: 10px; color: var(--inchiostro-tenue); font-style: italic; }
+.finale .pulsante[href] { justify-self: center; margin-top: 10px; }
+
+/* copertine con illustrazione vera: più spazio al disegno */
+.copertina-arte:has(img) { bottom: 0; }
+.copertina-arte:has(img) + .dorso + .copertina-band { min-height: 0; padding-top: 18%; background: linear-gradient(transparent, color-mix(in srgb, var(--colore) 94%, black) 46%); }
+.libro-scaffale .copertina-arte:has(img) + .dorso + .copertina-band span { display: none; }
+
+/* il libro gestisce lo swipe orizzontale, lo scorrimento verticale resta alla pagina */
+.libro { touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.libro img { -webkit-user-drag: none; pointer-events: none; }
+
+/* telefono: scaffale scorrevole con lo swipe */
+@media (max-width: 640px) {
+  .scaffale { padding: 0; }
+  .titolo-sezione, .nota-sezione { padding: 0 16px; }
+  .ripiano {
+    display: flex; gap: 18px; overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding: 0 16px; padding: 8px 16px 30px;
+    scrollbar-width: none;
+    background: linear-gradient(var(--legno) 0 55%, var(--legno-scuro) 55%) left bottom / 100% 22px no-repeat local;
+  }
+  .ripiano::-webkit-scrollbar { display: none; }
+  .ripiano::after { display: none; }
+  .libro-scaffale { flex: 0 0 72%; scroll-snap-align: start; padding-bottom: 14px; }
+  .libro-scaffale:last-child { margin-right: 16px; }
+}
